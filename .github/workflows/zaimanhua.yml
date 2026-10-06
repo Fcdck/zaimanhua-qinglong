@@ -2,13 +2,13 @@ name: Zaimanhua Daily Tasks
 
 on:
   schedule:
-    # 北京时间每天 08:00
+    # 北京时间 08:00
     - cron: "0 0 * * *"
-    # 北京时间每天 09:30
+    # 北京时间 09:30
     - cron: "30 1 * * *"
-    # 北京时间每天 10:00
+    # 北京时间 10:00
     - cron: "0 2 * * *"
-    # 北京时间每天 11:00
+    # 北京时间 11:00
     - cron: "0 3 * * *"
 
   workflow_dispatch:
@@ -27,11 +27,14 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          python -m playwright install --with-deps chromium
 
       - name: Run task
         env:
           ZAIMANHUA_COOKIE: ${{ secrets.ZAIMANHUA_COOKIE }}
+          PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
         run: |
           HOUR=$(date -u +"%H:%M")
 
